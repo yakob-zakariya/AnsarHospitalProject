@@ -1,0 +1,174 @@
+{% extends "users/doctor-base.html" %} {% block content %}
+<!-- Breadcrumb -->
+<!-- Page Title -->
+<div class="container mt-0">
+  <div class="row breadcrumb-bar">
+    <div class="col-md-6">
+      <h3 class="block-title">Patients</h3>
+    </div>
+    <div class="col-md-6">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="index.html">
+            <span class="ti-home"></span>
+          </a>
+        </li>
+        <li class="breadcrumb-item">Patients</li>
+        <li class="breadcrumb-item active">All Patients</li>
+      </ol>
+    </div>
+  </div>
+</div>
+<!-- /Page Title -->
+
+<!-- /Breadcrumb -->
+<!-- Main Content -->
+<div class="container">
+  <div class="row">
+    <!-- Widget Item -->
+    <div class="col-md-12">
+      <div class="widget-area-2 proclinic-box-shadow">
+        {% comment %}
+        <h3 class="widget-title">Patients List</h3>
+        {% endcomment %}
+        <div class="container">
+          {% if messages %} {% for message in messages %}
+          <div class="alert alert-{{message.tags}}">{{message }}</div>
+          {% endfor %} {% endif %}
+        </div>
+        <div class="row mb-4">
+          <div class="col-md-6"></div>
+
+          <div class="col-md-6 text-md-right">
+            <input
+              id="searchInput"
+              class="form-control"
+              type="search"
+              placeholder="Search for Patients"
+            />
+          </div>
+        </div>
+
+        <div class="table-responsive mb-3">
+          <table id="tableId" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th class="no-sort">
+                  <div class="custom-control custom-checkbox">
+                    <input
+                      class="custom-control-input"
+                      type="checkbox"
+                      id="select-all"
+                    />
+                    <label
+                      class="custom-control-label"
+                      for="select-all"
+                    ></label>
+                  </div>
+                </th>
+                <th>Patient ID</th>
+                <th>Patient Name</th>
+                <th>Age</th>
+                <th>Phone</th>
+                <th>Edit</th>
+                <th>Detail</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- /Widget Item -->
+  </div>
+</div>
+<!-- /Main Content -->
+
+<script>
+  // JavaScript code in your template or a separate JavaScript file
+  document.addEventListener("DOMContentLoaded", function () {
+    const tableBody = document.querySelector("#tbody");
+    const searchInput = document.getElementById("searchInput");
+
+    function populateTable(data) {
+      // Clear the table body before populating with filtered data
+      tableBody.innerHTML = "";
+
+      if (Array.isArray(data) && data.length > 0) {
+        // Iterate through the patient data and create table rows
+        data.forEach((patient) => {
+          const row = document.createElement("tr");
+          patient_history_url = `http://127.0.0.1:8000/tests/patient-history/${patient.id}`;
+
+          row.innerHTML = `
+            <td>
+              <div class="custom-control custom-checkbox">
+                <input class="custom-control-input" type="checkbox" id="${patient.id}" />
+                <label class="custom-control-label" for="${patient.id}"></label>
+              </div>
+            </td>
+            <td>${patient.id}</td>
+            <td>${patient.first_name} ${patient.last_name}</td>
+            <td>${patient.age}</td>
+            <td>${patient.contact_number}</td>
+            <td>
+              <button type="button" class="btn btn-sm btn-primary mb-0">
+                <span class="ti-pencil-alt"></span> EDIT
+              </button>
+            </td>
+            <td>
+              <a href=${patient_history_url} type="button" class="btn btn-primary mb-0">
+                <span class="ti-pencil-alt"></span> See
+              </a>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } else {
+        // Handle the case where data is empty or not found
+        const row = document.createElement("tr");
+        row.innerHTML = `<td colspan="7">No data available.</td>`;
+        tableBody.appendChild(row);
+      }
+    }
+
+    // Function to fetch all patient data
+    function fetchAllPatients() {
+      return fetch("http://127.0.0.1:8000/api/patient-list-api/")
+        .then((response) => response.json())
+        .then((responseData) => responseData);
+    }
+
+    // Function to filter data based on user input
+    function filterData(query) {
+      fetchAllPatients()
+        .then((data) => {
+          const filteredData = data.filter((patient) => {
+            return (
+              patient.first_name.toLowerCase().includes(query) ||
+              patient.last_name.toLowerCase().includes(query) ||
+              patient.age.toString().includes(query) ||
+              patient.contact_number.includes(query) ||
+              patient.id.toString().includes(query)
+            );
+          });
+          populateTable(filteredData);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          populateTable([]); // Display "No data available" for errors or not found
+        });
+    }
+
+    // Listen for changes in the search input field
+    searchInput.addEventListener("input", function () {
+      const query = searchInput.value.toLowerCase();
+      filterData(query);
+    });
+
+    // Initial data fetch and table population
+    filterData(""); // Fetch all data initially
+  });
+</script>
+
+{% endblock content %}

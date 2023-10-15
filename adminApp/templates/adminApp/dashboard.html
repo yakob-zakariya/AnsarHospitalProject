@@ -1,0 +1,222 @@
+{% extends "adminApp/index.html" %} {% block content %}
+<!-- Sale & Revenue Start -->
+<div class="container-fluid pt-4 px-4">
+  <div class="row g-4">
+    <div class="col-sm-6 col-xl-3">
+      <div
+        class="bg-light rounded d-flex align-items-center justify-content-between p-4"
+      >
+        <i class="fa fa-chart-line fa-3x text-primary"></i>
+        <div class="ms-3">
+          <p class="mb-2">Total Patients</p>
+          <h6 class="mb-0">{{patients}}</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <div
+        class="bg-light rounded d-flex align-items-center justify-content-between p-4"
+      >
+        <i class="fa fa-chart-bar fa-3x text-primary"></i>
+        <div class="ms-3">
+          <p class="mb-2">Appointmens</p>
+          <h6 class="mb-0">{{appointments}}</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <div
+        class="bg-light rounded d-flex align-items-center justify-content-between p-4"
+      >
+        <i class="fa fa-chart-area fa-3x text-primary"></i>
+        <div class="ms-3">
+          <p class="mb-2">Today Revenue</p>
+          <h6 class="mb-0">$ {{today_total}}</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <div
+        class="bg-light rounded d-flex align-items-center justify-content-between p-4"
+      >
+        <i class="fa fa-chart-pie fa-3x text-primary"></i>
+        <div class="ms-3">
+          <p class="mb-2">Total Revenue</p>
+          <h6 class="mb-0">$ {{total}}</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Sale & Revenue End -->
+
+<!-- Chart Start -->
+<div class="container-fluid pt-4 px-4">
+  <div class="row g-4">
+    <div class="col-sm-12 col-xl-6">
+      <div class="bg-light rounded h-100 p-4">
+        <h6 class="mb-4">Single Line Chart</h6>
+        <div id="chartContainer3"></div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-xl-6">
+      <div class="bg-light rounded h-100 p-4">
+        <h6 class="mb-4">Bars</h6>
+        <div id="patient-chart"></div>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <div class="bg-light rounded h-100 p-4">
+        <h6 class="mb-4 text-center">Pie Charts for the Employees</h6>
+        <div id="pie"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Chart End -->
+
+<script>
+  // line chart data using my api endpoint
+  const fetchPromis1 = fetch("http://127.0.0.1:8000/api/payments");
+  fetchPromis1
+    .then((response) => response.json())
+    .then((response) => {
+      const dates = [];
+      const payments = [];
+      for (let i = 0; i < response.length; i++) {
+        dates.push(response[i].date);
+        payments.push(response[i].total_payment);
+      }
+
+      const xAxisCategories = dates;
+      const yAxisValues = payments;
+
+      Highcharts.chart("chartContainer3", {
+        chart: {
+          type: "line",
+        },
+        title: {
+          text: "Revanue of Each day",
+        },
+        xAxis: {
+          categories: xAxisCategories,
+        },
+        yAxis: {
+          title: {
+            text: "Total Todays Revanue In Birr()",
+          },
+        },
+
+        series: [
+          {
+            name: "Total Revanue",
+            tooltip: {
+              formatter: function () {
+                var pointIndex = this.point.index;
+                var month = xAxisCategories[pointIndex];
+                var amount = yAxisValues[pointIndex];
+                return month + "<br>" + amount;
+              },
+            },
+            data: yAxisValues,
+          },
+        ],
+      });
+      console.log(dates);
+      console.log(payments);
+    });
+
+  // bar graph using my api endo point
+  const fetchPromis2 = fetch("http://127.0.0.1:8000/api/zone-patient-count/");
+  fetchPromis2
+    .then((response) => response.json())
+    .then((response) => {
+      const zones = [];
+      const patients = [];
+      for (let i = 0; i < response.length; i++) {
+        zones.push(response[i].zone_name);
+        patients.push(response[i].patient_count);
+      }
+
+      Highcharts.chart("patient-chart", {
+        chart: {
+          type: "column",
+        },
+        title: {
+          text: "Number Of Patients By Zone",
+        },
+        xAxis: {
+          categories: zones,
+        },
+        yAxis: {
+          title: {
+            text: "Patients (by Zone)",
+          },
+        },
+        series: [
+          {
+            name: "Patients",
+            data: patients,
+          },
+        ],
+      });
+    });
+
+  // pie chart using my endpoint
+
+  fetch("http://127.0.0.1:8000/api/user-percentage/")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      const d = [];
+      for (let i = 0; i < data.length; i++) {
+        d.push({
+          name: data[i].role,
+          y: data[i].percentage,
+          sliced: true,
+          selected: true,
+        });
+      }
+
+      Highcharts.chart("pie", {
+        chart: {
+          plotBackgroundColor: null,
+          plotBorderWidth: null,
+          plotShadow: false,
+          type: "pie",
+        },
+        title: {
+          text: "Number of Workers on diffrent position",
+          align: "center",
+        },
+        tooltip: {
+          pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>",
+        },
+        accessibility: {
+          point: {
+            valueSuffix: "%",
+          },
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: "pointer",
+            dataLabels: {
+              enabled: true,
+              format: "<b>{point.name}</b>: {point.percentage:.1f} %",
+            },
+          },
+        },
+        series: [
+          {
+            name: "Parcentage",
+            colorByPoint: true,
+            data: d,
+          },
+        ],
+      });
+    });
+</script>
+{% endblock content %}

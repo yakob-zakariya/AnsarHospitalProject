@@ -1,0 +1,85 @@
+{% extends "adminApp/index.html" %} {% block content %}
+
+<!-- Recent Sales Start -->
+<div class="container-fluid pt-4 px-4">
+  <div class="bg-light text-center rounded p-4">
+    {% if messages %} {% for message in messages %}
+    <div class="alert alert-{{message.tags}}">{{message }}</div>
+    {% endfor %} {% endif %}
+
+    <form
+      class="d-flex align-items-center justify-content-between mb-4"
+      method="POST"
+    >
+      {% csrf_token %}
+      <select
+        class="form-select form-select-sm m-3"
+        aria-label=".form-select-sm example"
+        name="is_active"
+      >
+        <option>Active</option>
+        <option selected>-------</option>
+        <option value="1">Yes</option>
+        <option value="0">No</option>
+      </select>
+
+      <select
+        class="form-select form-select-sm m-3"
+        aria-label=".form-select-sm example"
+        name="is_staff"
+      >
+        <option>Staff Status</option>
+        <option selected>-------</option>
+        <option value="1">Yes</option>
+        <option value="0">No</option>
+      </select>
+
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <h6 class="mb-0">Reception Users</h6>
+
+      <a href="{% url 'add-reception' %}" class="btn btn-primary"
+        >+ Add Reception</a
+      >
+    </div>
+    <div class="table-responsive">
+      <table
+        class="table text-start align-middle table-bordered table-hover mb-0"
+      >
+        <thead>
+          <tr class="text-dark">
+            <th scope="col">
+              <input class="form-check-input" type="checkbox" />
+            </th>
+            <th scope="col">User Name</th>
+            <th scope="col">Email Address</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Las Name</th>
+            <th scope="col">is Active</th>
+            <th scope="col">Is Staff</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for reception in receptions %}
+          <tr>
+            <td><input class="form-check-input" type="checkbox" /></td>
+            <td>{{reception.username}}</td>
+            <td>{{reception.email}}</td>
+            <td>{{reception.first_name}}</td>
+            <td>{{reception.last_name}}</td>
+            <td>{{reception.is_active}}</td>
+            <td>{{reception.is_active}}</td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-4">{{total}} Receptions</p>
+  </div>
+</div>
+<!-- Recent Sales End -->
+
+{% endblock content %}

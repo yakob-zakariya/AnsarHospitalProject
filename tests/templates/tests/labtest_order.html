@@ -1,0 +1,27 @@
+{% extends "users/doctor-base.html" %} {% block content %}
+
+<div class="container">
+  <h5 class="text-center">
+    Patient Name: {{patient.first_name}} {{patient.last_name}}
+  </h5>
+  <h5 class="text-center">Patient ID: {{patient.id}}</h5>
+  <form method="POST">
+    {% csrf_token%}
+    <fieldset class="form-group">
+      <label class="text-center" for="{{ form.lab_tests.id_for_label }}"
+        >Select Lab Tests:</label
+      >
+      <div class="row">
+        {% for lab_test in form.lab_tests %}
+        <div class="col-md-4">{{ lab_test }}</div>
+        {% endfor %}
+      </div>
+
+      <br />
+    </fieldset>
+    <div class="d-grid gap-2 text-center">
+      <button class="btn btn-primary" type="submit">Fill Lab Order</button>
+    </div>
+  </form>
+</div>
+{% endblock content %}

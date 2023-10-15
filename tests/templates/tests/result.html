@@ -1,0 +1,106 @@
+{% extends "tests/lab-tech-base.html" %} {% block content %}
+
+<!-- Main Content -->
+<div class="container">
+  <div class="row">
+    <!-- Widget Item -->
+    <div class="col-md-12">
+      <div class="widget-area-2 proclinic-box-shadow">
+        <h5 class="text-center">
+          Result for : >> {{patient.first_name}} {{patient.last_name}}
+        </h5>
+        <h5 class="text-center">Test :>> {{labtestorder.labtest.name}}</h5>
+
+        <form method="POST">
+          {% csrf_token %}
+
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <select
+                name="result"
+                class="form-select form-select-lg mb-3 w-100 p-2 mt-4"
+                aria-label="Large select example"
+              >
+                <option selected>Choose the Result</option>
+                <option value="Positive">Positive</option>
+                <option value="Negative">Negative</option>
+                <option value="Reactive">Reactive</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-12">
+              <label for="exampleFormControlTextarea1" class="form-label"
+                >Result Comment
+              </label>
+              <textarea
+                class="form-control"
+                id="exampleFormControlTextarea1"
+                rows="4"
+                name="result_comment"
+              ></textarea>
+            </div>
+
+            <div class="form-group col-md-6 mb-3">
+              <button type="submit" class="btn btn-primary btn-lg">
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- /Widget Item -->
+  </div>
+</div>
+<!-- /Main Content -->
+
+<script>
+  const regionSelect = document.getElementById("id_region");
+  const zoneSelect = document.getElementById("id_zone");
+  const woredaSelect = document.getElementById("id_woreda");
+
+  // Fetch regions and populate the region dropdown
+  fetch(`http://127.0.0.1:8000/users/region/`)
+    .then((response) => response.json())
+    .then((data) => {
+      regionSelect.innerHTML = '<option value="">Select a Region</option>';
+      data.forEach((region) => {
+        regionSelect.innerHTML += `<option value="${region.id}">${region.region_name}</option>`;
+      });
+    });
+
+  regionSelect.addEventListener("change", () => {
+    const regionId = regionSelect.value;
+    if (regionId) {
+      fetch(`http://127.0.0.1:8000/users/zones_by_region/${regionId}/`)
+        .then((response) => response.json())
+        .then((data) => {
+          zoneSelect.innerHTML = '<option value="">Select a Zone</option>';
+          data.forEach((zone) => {
+            zoneSelect.innerHTML += `<option value="${zone.id}">${zone.zone_name}</option>`;
+          });
+        });
+    } else {
+      zoneSelect.innerHTML = '<option value="">Select a Zone</option>';
+      woredaSelect.innerHTML = '<option value="">Select a Woreda</option>';
+    }
+  });
+
+  zoneSelect.addEventListener("change", () => {
+    const zoneId = zoneSelect.value;
+    if (zoneId) {
+      fetch(`http://127.0.0.1:8000/users/woredas_by_zone/${zoneId}/`)
+        .then((response) => response.json())
+        .then((data) => {
+          woredaSelect.innerHTML = '<option value="">Select a Woreda</option>';
+          data.forEach((woreda) => {
+            woredaSelect.innerHTML += `<option value="${woreda.id}">${woreda.woreda_name}</option>`;
+          });
+        });
+    } else {
+      woredaSelect.innerHTML = '<option value="">Select a Woreda</option>';
+    }
+  });
+</script>
+
+{% endblock content %}

@@ -1,0 +1,43 @@
+{% extends "users/base2.html" %} {% load crispy_forms_tags %} {% block content%}
+<!-- Breadcrumb -->
+<!-- Page Title -->
+<div class="container mt-0">
+  <div class="row breadcrumb-bar">
+    <div class="col-md-6">
+      <h3 class="block-title">Add Appointment</h3>
+    </div>
+    <div class="col-md-6">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="index.html">
+            <span class="ti-home"></span>
+          </a>
+        </li>
+        <li class="breadcrumb-item">Appointments</li>
+        <li class="breadcrumb-item active">Add Appointment</li>
+      </ol>
+    </div>
+  </div>
+</div>
+<!-- /Page Title -->
+
+<!-- /Breadcrumb -->
+<!-- Main Content -->
+<div class="container">
+  <div class="row">
+    <!-- Widget Item -->
+    <div class="col-md-12">
+      <div class="widget-area-2 proclinic-box-shadow">
+        <h3 class="widget-title">Add Appointment</h3>
+        <form method="POST">
+          {% csrf_token %} {{form|crispy }}
+          <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+        </form>
+      </div>
+    </div>
+    <!-- /Widget Item -->
+  </div>
+</div>
+<!-- /Main Content -->
+
+{% endblock content %}

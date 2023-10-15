@@ -1,0 +1,113 @@
+{% extends "users/base2.html" %} {% block content %}
+<!-- Breadcrumb -->
+<!-- Page Title -->
+<div class="container mt-0">
+  <div class="row breadcrumb-bar">
+    <div class="col-md-6">
+      <h3 class="block-title">Patients have pending orders</h3>
+    </div>
+    <div class="col-md-6">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="index.html">
+            <span class="ti-home"></span>
+          </a>
+        </li>
+        <li class="breadcrumb-item">Patients</li>
+        <li class="breadcrumb-item active">pending orders</li>
+      </ol>
+    </div>
+  </div>
+</div>
+<!-- /Page Title -->
+
+<!-- /Breadcrumb -->
+<!-- Main Content -->
+<div class="container">
+  <div class="row">
+    <!-- Widget Item -->
+    <div class="col-md-12">
+      <div class="widget-area-2 proclinic-box-shadow">
+        <h3 class="widget-title">
+          Patients That has Pending Lab Test Orders List
+        </h3>
+        <div class="row mb-4">
+          <div class="col-md-6"></div>
+          <div class="col-md-6 text-md-right">
+            <form>
+              <input
+                id="searchInput"
+                class="form-control"
+                type="search"
+                placeholder="Search for Patients"
+              />
+            </form>
+          </div>
+        </div>
+
+        <div class="table-responsive mb-3">
+          <table id="tableId" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th class="no-sort">
+                  <div class="custom-control custom-checkbox">
+                    <input
+                      class="custom-control-input"
+                      type="checkbox"
+                      id="select-all"
+                    />
+                    <label
+                      class="custom-control-label"
+                      for="select-all"
+                    ></label>
+                  </div>
+                </th>
+                <th>No</th>
+                <th>Patient ID</th>
+                <th>Patient Name</th>
+
+                <th>Phone</th>
+
+                <th>Detail</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+            {% for patient in patients %}
+            <tr>
+              <td>
+                <div class="custom-control custom-checkbox">
+                  <input
+                    class="custom-control-input"
+                    type="checkbox"
+                    id="{{patient.id}}"
+                  />
+                  <label
+                    class="custom-control-label"
+                    for="{{patient.id}}"
+                  ></label>
+                </div>
+              </td>
+              <td>{{forloop.counter}}</td>
+              <td>{{patient.id}}</td>
+              <td>{{patient.first_name}} {{patient.last_name}}</td>
+              <td>{{patient.contact_number}}</td>
+              <td>
+                <a href="{% url 'tests:patient-detail' patient.id %}">
+                  <button type="button" class="btn btn-sm btn-primary mb-0">
+                    <span class="ti-pencil-alt"></span> Detail
+                  </button>
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+          <!--Export links-->
+        </div>
+      </div>
+    </div>
+    <!-- /Widget Item -->
+  </div>
+</div>
+<!-- /Main Content -->
+
+{% endblock content %}

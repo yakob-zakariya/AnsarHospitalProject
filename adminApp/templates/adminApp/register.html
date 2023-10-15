@@ -1,0 +1,42 @@
+{% extends "adminApp/index.html" %} {% block content %}
+<div class="container-fluid pt-4 px-4">
+  <div class="row g-4">
+    <div class="col-sm-12">
+      <div class="bg-light rounded h-100 p-4">
+        <h6 class="mb-4">{{user}} Form</h6>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="exampleInputUsername" class="form-label"
+              >Username</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="exampleInputUsername"
+              aria-describedby="emailHelp"
+              required
+              name="username"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label"
+              >Password</label
+            >
+            <input
+              type="password"
+              class="form-control"
+              id="exampleInputPassword1"
+              required
+              name="password"
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary">Add {{user}}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,126 @@
+{% extends "users/doctor-base.html" %} {% block content %}
+
+<!-- Main Content -->
+<div class="container">
+  <div class="row">
+    <!-- Widget Item -->
+    <div class="col-md-6">
+      <div class="widget-area-2 proclinic-box-shadow">
+        <h3 class="widget-title">Patient Details</h3>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td><strong>patient id</strong></td>
+                <td>{{patient.id}}</td>
+              </tr>
+              <tr>
+                <td><strong>Name</strong></td>
+                <td>{{patient.first_name}} {{patient.last_name}}</td>
+              </tr>
+              <tr>
+                <td><strong>Gender</strong></td>
+                <td>{{patient.gender}}</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Address</strong>
+                </td>
+                <td>
+                  {{patient.woreda.woreda_name}},{{patient.woreda.zone.zone_name}},
+                  {{patient.woreda.zone.region.region_name}}
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Phone </strong></td>
+                <td>{{patient.contact_number}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- /Widget Item -->
+    <!-- Widget Item -->
+    <div class="col-md-6">
+      <div class="widget-area-2 proclinic-box-shadow">
+        <h3 class="widget-title">Vital Signs</h3>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <tbody>
+              {% for v in vital %}
+              <tr>
+                <td><strong>Wieght </strong></td>
+                <td>{{v.body_weight}} kg</td>
+              </tr>
+
+              <tr>
+                <td><strong>Blood Pressure</strong></td>
+                <td>{{v.blood_pressure}}</td>
+              </tr>
+
+              <tr>
+                <td><strong>Temprature</strong></td>
+                <td>{{v.temperature}} oC</td>
+              </tr>
+
+              <tr>
+                <td>
+                  <strong>Heart Rate</strong>
+                </td>
+                <td>{{v.heart_rate}}</td>
+              </tr>
+
+              <tr>
+                <td><strong>respiratory Rate </strong></td>
+                <td>{{v.respiratory_rate }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- /Widget Item -->
+    <!-- Widget Item -->
+    <div class="col-md-12">
+      <div class="widget-area-2 proclinic-box-shadow">
+        <h3 class="widget-title text-center">
+          Lab Test Results for {{patient.first_name}} {{patient.last_name}}
+        </h3>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>test name</th>
+                <th>ordered by</th>
+                <th>Order Date</th>
+                <th>result date</th>
+                <th>Result</th>
+                <th>Comment</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for result in results %}
+
+              <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{result.labtestorder.labtest.name}}</td>
+                <td>{{result.labtestorder.doctor.username}}</td>
+                <td>{{result.labtestorder.order_date}}</td>
+                <td>{{result.result_date}}</td>
+                <td>{{result.result}}</td>
+                <td>{{result.result_comment}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- /Widget Item -->
+  </div>
+</div>
+<!-- /Main Content -->
+{% endblock content %}

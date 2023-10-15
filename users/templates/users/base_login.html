@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <!-- Mirrored from www.konnectplugins.com/proclinic/Horizontal/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 24 Jan 2022 10:42:12 GMT -->
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>ProClinic-Bootstrap4 Hospital Admin</title>
+    <!-- Fav  Icon Link -->
+    <link
+      rel="shortcut icon"
+      type="{% static 'users/image/png"
+      href="images/fav.png' %}"
+    />
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="{% static 'users/css/bootstrap.min.css' %}" />
+    <!-- themify icons CSS -->
+    <link rel="stylesheet" href="{% static 'users/css/themify-icons.css' %}" />
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{% static 'users/css/styles.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'users/css/green.css' %}"
+      id="style_theme' %}"
+    />
+    <link rel="stylesheet" href="{% static 'users/css/responsive.css' %}" />
+
+    <script src="{% static 'users/js/modernizr.min.js' %}"></script>
+  </head>
+
+  <body class="auth-bg">
+    <!-- Pre Loader -->
+    <div class="loading">
+      <div class="spinner">
+        <div class="double-bounce1"></div>
+        <div class="double-bounce2"></div>
+      </div>
+    </div>
+    <!--/Pre Loader -->
+    <!-- Color Changer -->
+    <div class="theme-settings" id="switcher">
+      <span class="theme-click">
+        <span class="ti-settings"></span>
+      </span>
+      <span
+        class="theme-color theme-default theme-active"
+        data-color="green"
+      ></span>
+      <span class="theme-color theme-blue" data-color="blue"></span>
+      <span class="theme-color theme-red" data-color="red"></span>
+      <span class="theme-color theme-violet" data-color="violet"></span>
+      <span class="theme-color theme-yellow" data-color="yellow"></span>
+    </div>
+    <!-- /Color Changer -->
+    <div class="wrapper">
+      <!-- Page Content  -->
+      <div id="content">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-6 auth-box mt-3">
+              {% block content %} {% endblock content %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /Page Content  -->
+    </div>
+    <!-- Jquery Library-->
+    <script src="{% static 'users/js/jquery-3.2.1.min.js' %}"></script>
+    <!-- Popper Library-->
+    <script src="{% static 'users/js/popper.min.js' %}"></script>
+    <!-- Bootstrap Library-->
+    <script src="{% static 'users/js/bootstrap.min.js' %}"></script>
+    <!-- Custom Script-->
+    <script src="{% static 'users/js/custom.js' %}"></script>
+  </body>
+
+  <!-- Mirrored from www.konnectplugins.com/proclinic/Horizontal/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 24 Jan 2022 10:42:12 GMT -->
+</html>

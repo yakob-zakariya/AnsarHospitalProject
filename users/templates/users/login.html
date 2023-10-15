@@ -1,0 +1,48 @@
+{% extends "users/base_login.html" %} {% block content %}
+<div class="proclinic-box-shadow">
+  <h3 class="widget-title">Login</h3>
+  <form class="widget-form" method="post">
+    <!-- form-group -->
+    {% csrf_token %}
+
+    <div class="form-group row">
+      <div class="col-sm-12">
+        <input
+          name="username"
+          placeholder="Username"
+          class="form-control"
+          required=""
+        />
+      </div>
+    </div>
+    <!-- /.form-group -->
+    <!-- form-group -->
+    <div class="form-group row">
+      <div class="col-sm-12">
+        <input
+          type="password"
+          placeholder="Password"
+          name="password"
+          class="form-control"
+        />
+      </div>
+    </div>
+    <!-- /.form-group -->
+    <!-- Check Box -->
+    <div class="form-check row">
+      <div class="col-sm-12 text-left"></div>
+    </div>
+    <!-- /Check Box -->
+    <!-- Login Button -->
+    <div class="button-btn-block">
+      <button type="submit" class="btn btn-primary btn-lg btn-block">
+        Login
+      </button>
+      {% if form.non_field_errors %}
+      <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+      {% endif %}
+    </div>
+  </form>
+</div>
+
+{% endblock content %}

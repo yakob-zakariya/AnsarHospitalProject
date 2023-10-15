@@ -1,0 +1,184 @@
+{% extends "users/base2.html" %} {% block content %}
+<!-- Breadcrumb -->
+<!-- Page Title -->
+<div class="container mt-0">
+  <div class="row breadcrumb-bar">
+    <div class="col-md-6">
+      <h3 class="block-title">Add Patient</h3>
+    </div>
+    <div class="col-md-6">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="index.html">
+            <span class="ti-home"></span>
+          </a>
+        </li>
+        <li class="breadcrumb-item">Patients</li>
+        <li class="breadcrumb-item active">Add Patient</li>
+      </ol>
+    </div>
+  </div>
+</div>
+<!-- /Page Title -->
+
+<!-- /Breadcrumb -->
+<!-- Main Content -->
+<div class="container">
+  <div class="row">
+    <!-- Widget Item -->
+    <div class="col-md-12">
+      <div class="widget-area-2 proclinic-box-shadow">
+        <h3 class="widget-title">Add Patient</h3>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="patient-first-name">Patient First Name</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="patient-first-name"
+                id="patient-first-name"
+                name="patient-first-name"
+                required
+              />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="patient-first-name">Patient Last Name</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="patient-last-name"
+                id="patient-last-name"
+                name="patient-last-name"
+                required
+              />
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="phone">Phone</label>
+              <input
+                type="text"
+                placeholder="Phone"
+                class="form-control"
+                id="phone"
+                name="phone"
+                required
+              />
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="age">Age</label>
+              <input
+                type="text"
+                placeholder="Age"
+                class="form-control"
+                id="age"
+                name="age"
+                required
+              />
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="gender">Gender</label>
+              <select class="form-control" id="gender" name="gender" required>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="id_region">Region</label>
+              <select
+                id="id_region"
+                class="form-control"
+                name="region"
+                required
+              >
+                <option value="">Select a Region</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="id_zone">Zone</label>
+              <select id="id_zone" class="form-control" name="zone" required>
+                <option value="">Select a Zone</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="id_woreda">Woreda</label>
+              <select
+                id="id_woreda"
+                class="form-control"
+                name="woreda"
+                required
+              >
+                <option value="">Select Woreda</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-6 mb-3">
+              <button type="submit" class="btn btn-primary btn-lg">
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- /Widget Item -->
+  </div>
+</div>
+<!-- /Main Content -->
+
+<script>
+  const regionSelect = document.getElementById("id_region");
+  const zoneSelect = document.getElementById("id_zone");
+  const woredaSelect = document.getElementById("id_woreda");
+
+  // Fetch regions and populate the region dropdown
+  fetch(`http://127.0.0.1:8000/api/region/`)
+    .then((response) => response.json())
+    .then((data) => {
+      regionSelect.innerHTML = '<option value="">Select a Region</option>';
+      data.forEach((region) => {
+        regionSelect.innerHTML += `<option value="${region.id}">${region.region_name}</option>`;
+      });
+    });
+
+  regionSelect.addEventListener("change", () => {
+    const regionId = regionSelect.value;
+    if (regionId) {
+      fetch(`http://127.0.0.1:8000/api/zones_by_region/${regionId}/`)
+        .then((response) => response.json())
+        .then((data) => {
+          zoneSelect.innerHTML = '<option value="">Select a Zone</option>';
+          data.forEach((zone) => {
+            zoneSelect.innerHTML += `<option value="${zone.id}">${zone.zone_name}</option>`;
+          });
+        });
+    } else {
+      zoneSelect.innerHTML = '<option value="">Select a Zone</option>';
+      woredaSelect.innerHTML = '<option value="">Select a Woreda</option>';
+    }
+  });
+
+  zoneSelect.addEventListener("change", () => {
+    const zoneId = zoneSelect.value;
+    if (zoneId) {
+      fetch(`http://127.0.0.1:8000/api/woredas_by_zone/${zoneId}/`)
+        .then((response) => response.json())
+        .then((data) => {
+          woredaSelect.innerHTML = '<option value="">Select a Woreda</option>';
+          data.forEach((woreda) => {
+            woredaSelect.innerHTML += `<option value="${woreda.id}">${woreda.woreda_name}</option>`;
+          });
+        });
+    } else {
+      woredaSelect.innerHTML = '<option value="">Select a Woreda</option>';
+    }
+  });
+</script>
+
+{% endblock content %}
